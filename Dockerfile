@@ -98,10 +98,14 @@ ENV PYTHONUNBUFFERED 1
 
 # Install OS dependencies
 RUN apt-get update && apt-get install -y \
-    libpq-dev \         # for PostgreSQL
-    libjpeg-dev \       # for Pillow
-    libcairo2 \         # for CairoSVG
-    gcc \               # for general C extensions
+    # for postgres
+    libpq-dev \
+    # for Pillow
+    libjpeg-dev \
+    # for CairoSVG
+    libcairo2 \
+    # other
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # Create the application directory
