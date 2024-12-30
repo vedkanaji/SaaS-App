@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from decouple import config
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ib7swa#6%xgfdcgj4#*a%9r37cd07^75!+ce^zt7+s!i$h2*xa'
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DJANGO_DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = [
     '.railway.app'
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'core', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,6 +90,16 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = config("DATABASE_URL", cast=str)
+# print('DATABASE_URL', DATABASE_URL)
+if DATABASE_URL is not None:
+    import dj_database_url as dburl
+    DATABASES = {
+        'default':  dburl.config(default=DATABASE_URL, 
+                                conn_max_age=600,
+                                conn_health_checks=True)
+
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -126,8 +136,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATICFILES_BASE_DIRS = BASE_DIR / 'staticfiles'
+STATICFILES_VENDOR_DIRS = STATICFILES_BASE_DIRS / 'vendors'
 # Default primary key field type
+STATICFILES_DIRS = [
+    STATICFILES_BASE_DIRS,
+    STATICFILES_VENDOR_DIRS
+]
+
+STATIC_ROOT = BASE_DIR / "local-cdn"
+if not DEBUG:
+    STATIC_ROOT = BASE_DIR / "prod-cdn"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
