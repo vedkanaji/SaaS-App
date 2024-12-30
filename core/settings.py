@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     
     #local apps
     'visits', 
+    'commando',
 ]
 
 MIDDLEWARE = [
