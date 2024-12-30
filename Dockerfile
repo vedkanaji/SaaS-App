@@ -127,6 +127,8 @@ ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 
+RUN mkdir -p /code/staticfiles/vendors
+
 # Defer static collection, vendor pull, and database migrations to runtime
 RUN printf "#!/bin/bash\n" > ./paracord_runner.sh && \
     printf "RUN_PORT=\"\${PORT:-8000}\"\n\n" >> ./paracord_runner.sh && \
