@@ -52,7 +52,7 @@ RUN python manage.py collectstatic --noinput
 # set the Django default project name
 ARG PROJ_NAME="core"
 
-ARG DJANGO_DEBUG = 1
+ARG DJANGO_DEBUG=1
 ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 
 ARG DJANGO_SECRET_KEY
