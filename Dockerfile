@@ -51,10 +51,11 @@ RUN python manage.py collectstatic --noinput
 
 # set the Django default project name
 ARG PROJ_NAME="core"
+
 ARG DJANGO_DEBUG = 1
 ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 
-ARG DJANGO_SECRET_KEY 
+ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 
 # create a bash script to run the Django project
